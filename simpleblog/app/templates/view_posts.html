@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Posts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-gray-800 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-xl">MyWebsite</div>
+            <div>
+                <a href="{% url 'profile' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Profile</a>
+                <a href="{% url 'create_post' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">Create Post</a>
+                <a href="{% url 'logout' %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold">Blog Posts</h1>
+        <ul class="mt-4">
+            {% for post in page_obj %}
+            <li class="mb-4 p-4 border border-gray-300 rounded">
+                <h2 class="text-xl font-bold"><a href="{% url 'view_single_post' post.id %}">{{ post.title }}</a></h2>
+                <p>{{ post.content|truncatewords:30 }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="mt-4">
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+            <div>
+                {% if page_obj.has_previous %}
+                <a href="?page=1" class="text-blue-500 hover:underline">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="text-blue-500 hover:underline">Previous</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="text-blue-500 hover:underline">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="text-blue-500 hover:underline">Last</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
